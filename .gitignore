@@ -26,3 +26,5 @@ scratch_card-*.tar
 
 mix.lock
 
+.vscode
+
