@@ -33,7 +33,7 @@ curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId
 Please check and try again. For recharge dial *141*recharge voucher PIN# ok. Thank you"
 ```
 
-### Dial *141*1#
+### Dial *141\*1#
 
 ```bash
 curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId\=session_0001\&serviceCode\=\*141%23\&text\=\*141\*1%23
@@ -41,7 +41,7 @@ curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId
 "END Sorry we are unable to complete your request at the moment. Please try again later"
 ```
 
-### Dial *141*123456789#
+### Dial *141\*123456789#
 
 ```bash
 curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId\=session_0001\&serviceCode\=\*141%23\&text\=\*141\*123456789%23
