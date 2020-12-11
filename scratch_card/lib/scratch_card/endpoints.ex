@@ -17,6 +17,7 @@ defmodule ScratchCard.Endpoints do
   # Africa talking callback URL
   post "v1/ussd" do
     request = conn.params
+
     %{"text" => text, "sessionId" => session_id, "serviceCode" => service_code} = request
 
     menu = Ussd.start_session()

@@ -1,9 +1,28 @@
 defmodule ScratchCard.Ussd.ProcessCardHandler do
   @behaviour ExUssd.Handler
 
+  @moduledoc """
+  This module implements the initial USSD Menu handler logic.
+
+  iex> menu = ScratchCard.Ussd.start_session()
+
+  iex> ExUssd.simulate(menu: menu, text: "*141*1#", service_code: "*141#")
+      {:ok,
+      %{
+        menu_string: "Sorry we are unable to complete your request at the moment. Please try again later",
+        should_close: true
+      }}
+
+  iex> ExUssd.simulate(menu: menu, text: "*141*123456789#", service_code: "*141#")
+      {:ok, %{menu_string: "Recharge successful, thank you.", should_close: true}}
+
+  """
+
+  @sucessful_recharge "Recharge successful, thank you."
+  @error_recharging "Sorry we are unable to complete your request at the moment. Please try again later"
   def success_menu(menu) do
     menu
-    |> Map.put(:title, "Recharge sucessful, thank you.")
+    |> Map.put(:title, @sucessful_recharge)
     |> Map.put(:should_close, true)
   end
 
@@ -11,7 +30,7 @@ defmodule ScratchCard.Ussd.ProcessCardHandler do
     menu
     |> Map.put(
       :error,
-      "Sorry we are unable to complete your request at the moment. Please try again later. Thank you\n"
+      @error_recharging
     )
     |> Map.put(:should_close, true)
   end

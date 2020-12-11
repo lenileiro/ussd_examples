@@ -3,7 +3,6 @@ defmodule UssdTest do
   alias ScratchCard.Ussd
 
   describe "test ussd start Menu" do
-
     menu = Ussd.start_session()
 
     session = "session_10001"
@@ -14,16 +13,32 @@ defmodule UssdTest do
 
   describe "dial *141# " do
     menu = Ussd.start_session()
-    assert ExUssd.simulate(menu: menu, text: "*141#", service_code: "*141#") == {:ok, %{menu_string: "You have entered an incorrect format.\nPlease check and try again. For recharge dial *141*recharge voucher PIN# ok. Thank you.", should_close: false}}
+
+    assert ExUssd.simulate(menu: menu, text: "*141#", service_code: "*141#") ==
+             {:ok,
+              %{
+                menu_string:
+                  "You have entered an incorrect format.\nPlease check and try again. For recharge dial *141*recharge voucher PIN# ok. Thank you.",
+                should_close: true
+              }}
   end
 
   describe "dial with incorrect voucher_number" do
     menu = Ussd.start_session()
-    assert ExUssd.simulate(menu: menu, text: "*141*1#", service_code: "*141#") == {:ok, %{menu_string: "Sorry we are unable to complete your request at the moment. Please try again later. Thank you\n\n0:BACK", should_close: false}}
+
+    assert ExUssd.simulate(menu: menu, text: "*141*1#", service_code: "*141#") ==
+             {:ok,
+              %{
+                menu_string:
+                  "Sorry we are unable to complete your request at the moment. Please try again later",
+                should_close: true
+              }}
   end
 
   describe "dial with valid voucher_number" do
     menu = Ussd.start_session()
-    assert ExUssd.simulate(menu: menu, text: "*141*123456789#", service_code: "*141#") == {:ok, %{menu_string: "Recharge sucessful, thank you.", should_close: true}}
+
+    assert ExUssd.simulate(menu: menu, text: "*141*123456789#", service_code: "*141#") ==
+             {:ok, %{menu_string: "Recharge successful, thank you.", should_close: true}}
   end
 end

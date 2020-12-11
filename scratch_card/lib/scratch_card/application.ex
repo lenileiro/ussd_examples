@@ -5,16 +5,22 @@ defmodule ScratchCard.Application do
 
   use Application
 
+  require Logger
+
   def start(_type, _args) do
+    port = Application.get_env(:scratch_card, :port)
+
     children = [
       Plug.Cowboy.child_spec(
         scheme: :http,
         plug: ScratchCard.Endpoints,
         options: [
-          port: Application.get_env(:scratch_card, :port)
+          port: port
         ]
       )
     ]
+
+    Logger.info("App Started on Port #{port}")
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
