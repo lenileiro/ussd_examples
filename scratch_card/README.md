@@ -46,5 +46,5 @@ curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId
 ```bash
 curl -X POST http://localhost:8080/v1/ussd\?phoneNumber\=254722000000\&sessionId\=session_0001\&serviceCode\=\*141%23\&text\=\*141\*123456789%23
 
-"END Recharge successful, thank you."
+"END Recharge successful"
 ```

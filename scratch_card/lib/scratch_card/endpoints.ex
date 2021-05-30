@@ -22,12 +22,25 @@ defmodule ScratchCard.Endpoints do
 
     menu = Ussd.start_session()
 
-    {:ok, response} =
+    response =
       ExUssd.goto(
-        internal_routing: %{text: text, session_id: session_id, service_code: service_code},
         menu: menu,
-        api_parameters: request
+        api_parameters: %{
+          "service_code" => service_code,
+          "session_id" => session_id,
+          "text" => text
+        }
       )
+      |> case do
+        {:ok, %{menu_string: menu_string, should_close: false}} ->
+          "CON " <> menu_string
+
+        {:ok, %{menu_string: menu_string, should_close: true}} ->
+          # End Session
+          ExUssd.end_session(session_id: session_id)
+
+          "END " <> menu_string
+      end
 
     send_resp(conn, 200, response)
   end

@@ -2,19 +2,17 @@ defmodule UssdTest do
   use ExUnit.Case
   alias ScratchCard.Ussd
 
-  describe "test ussd start Menu" do
-    menu = Ussd.start_session()
-
-    session = "session_10001"
-    %{menu: response_menu} = ExUssd.Utils.navigate("", menu, session)
-    get_menu = ExUssd.get_menu(session_id: session)
-    assert response_menu.title == get_menu.title
-  end
-
   describe "dial *141# " do
     menu = Ussd.start_session()
 
-    assert ExUssd.simulate(menu: menu, text: "*141#", service_code: "*141#") ==
+    assert ExUssd.goto(
+             menu: menu,
+             api_parameters: %{
+               "service_code" => "*141#",
+               "session_id" => "session_01",
+               "text" => "*141#"
+             }
+           ) ==
              {:ok,
               %{
                 menu_string:
@@ -26,7 +24,14 @@ defmodule UssdTest do
   describe "dial with incorrect voucher_number" do
     menu = Ussd.start_session()
 
-    assert ExUssd.simulate(menu: menu, text: "*141*1#", service_code: "*141#") ==
+    assert ExUssd.goto(
+             menu: menu,
+             api_parameters: %{
+               "service_code" => "*141#",
+               "session_id" => "session_01",
+               "text" => "*141*1#"
+             }
+           ) ==
              {:ok,
               %{
                 menu_string:
@@ -38,7 +43,14 @@ defmodule UssdTest do
   describe "dial with valid voucher_number" do
     menu = Ussd.start_session()
 
-    assert ExUssd.simulate(menu: menu, text: "*141*123456789#", service_code: "*141#") ==
-             {:ok, %{menu_string: "Recharge successful, thank you.", should_close: true}}
+    assert ExUssd.goto(
+             menu: menu,
+             api_parameters: %{
+               "service_code" => "*141#",
+               "session_id" => "session_01",
+               "text" => "*141*123456789#"
+             }
+           ) ==
+             {:ok, %{menu_string: "Recharge successful", should_close: true}}
   end
 end
